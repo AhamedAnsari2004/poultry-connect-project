@@ -1,0 +1,39 @@
+#include <DHT.h>
+
+#define DHTPIN 2         // Pin connected to the DHT sensor
+#define DHTTYPE DHT11    // Change to DHT22 if using it
+#define MQ_SENSOR A0     // MQ sensor connected to Analog pin A0
+#define SOUND_SENSOR A1  // Microphone sound sensor connected to Analog pin A1
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+    Serial.begin(9600);
+    dht.begin();
+    pinMode(MQ_SENSOR, INPUT);
+    pinMode(SOUND_SENSOR, INPUT);
+}
+
+void loop() {
+    // Read temperature & humidity
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    // Read ammonia concentration from MQ sensor
+    int mq_value = analogRead(MQ_SENSOR);
+
+    // Read sound level from the microphone sensor
+    int sound_level = analogRead(SOUND_SENSOR);
+
+    // Display results on Serial Monitor
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.print(" °C, Humidity: ");
+    Serial.print(humidity);
+    Serial.print(" %, Ammonia (MQ): ");
+    Serial.print(mq_value);
+    Serial.print(", Sound Level: ");
+    Serial.println(sound_level);
+
+    delay(1000);  // Delay for stability
+}
